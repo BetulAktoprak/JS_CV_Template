@@ -1,7 +1,7 @@
 const infosElement = document.getElementById("infos");
 const skillsElement = document.getElementById("skills");
 const languagesElement = document.getElementById("languages");
-const experienceElement = document.getElementById("experience");
+const projectElement = document.getElementById("projects");
 const educationElement = document.getElementById("education");
 const mediaElement = document.getElementById("socialMedia");
 
@@ -42,34 +42,38 @@ fetch("./cvTemplate.json")
         languagesElement.innerHTML += element;
     });
 
-    data.experiences.forEach((experience, index) => {
+    data.projects.forEach((project, index) => {
         const element = `
             <div class="w3-container">
                 <h5 class="w3-opacity">
-                  <b>${experience.profession} / ${experience.companySite}</b>
+                  <b>${project.name}</b>
                 </h5>
-                <h6 class="w3-text-teal">
-                  <i class="fa fa-calendar fa-fw w3-margin-right"></i>${experience.startDate} -
-                  ${index !== 0 ?  `${experience.endDate}` : `<span class="w3-tag w3-teal w3-round">${experience.endDate}</span>`}
-                </h6>
                 <p>
-                  ${experience.description}
+                  ${project.description}
                 </p>
+                <i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i><a>${project.link}</a>
                 <hr />
             </div>
         `;
 
-        experienceElement.innerHTML += element;
+        projectElement.innerHTML += element;
     });
 
-    data.educations.forEach(education => {
+    
+    data.educations.forEach((education) => {
+        let descriptionContent = '';
+        if (Array.isArray(education.description)) {
+            descriptionContent = education.description
+                .map((desc) => `<li>${desc.title}</li>`)
+                .join('');
+            descriptionContent = `<ul>${descriptionContent}</ul>`;
+        } else {
+            descriptionContent = `<p>${education.description}</p>`;
+        }
         const element = `
             <div class="w3-container">
               <h5 class="w3-opacity"><b>${education.name}</b></h5>
-              <h6 class="w3-text-teal">
-                <i class="fa fa-calendar fa-fw w3-margin-right"></i>${education.startDate} ${education.endDate}
-              </h6>
-              <p>${education.description}</p>
+              <p> ${descriptionContent}</p>
               <hr />
             </div>
         `;
